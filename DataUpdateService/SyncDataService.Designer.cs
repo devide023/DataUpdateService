@@ -1,6 +1,6 @@
 ﻿namespace DataUpdateService
 {
-    partial class Service1
+    partial class SyncDataService
     {
         /// <summary> 
         /// 必需的设计器变量。

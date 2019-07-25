@@ -17,7 +17,7 @@ namespace DataUpdateService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new SyncDataService()
             };
             ServiceBase.Run(ServicesToRun);
         }

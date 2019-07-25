@@ -7,12 +7,12 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-
+using Quartz;
 namespace DataUpdateService
 {
-    public partial class Service1 : ServiceBase
+    public partial class SyncDataService : ServiceBase
     {
-        public Service1()
+        public SyncDataService()
         {
             InitializeComponent();
         }
