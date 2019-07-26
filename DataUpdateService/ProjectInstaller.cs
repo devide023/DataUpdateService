@@ -32,14 +32,14 @@ namespace DataUpdateService
 
         private void serviceInstaller1_AfterInstall(object sender, InstallEventArgs e)
         {
-            string Cmdstring = "sc start dataupdate"; //CMD命令
+            string Cmdstring = "sc start SyncDataService"; //CMD命令
             p.StandardInput.WriteLine(Cmdstring);
             p.StandardInput.WriteLine("exit");
         }
 
         private void serviceInstaller1_BeforeUninstall(object sender, InstallEventArgs e)
         {
-            string Cmdstring = "sc stop dataupdate"; //CMD命令
+            string Cmdstring = "sc stop SyncDataService"; //CMD命令
             p.StandardInput.WriteLine(Cmdstring);
             p.StandardInput.WriteLine("exit");
         }

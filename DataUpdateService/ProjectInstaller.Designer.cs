@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.serviceProcessInstaller1 = new System.ServiceProcess.ServiceProcessInstaller();
-            this.serviceInstaller1 = new System.ServiceProcess.ServiceInstaller();
+            this.SyncDataService = new System.ServiceProcess.ServiceInstaller();
             // 
             // serviceProcessInstaller1
             // 
@@ -38,26 +38,26 @@
             this.serviceProcessInstaller1.Username = null;
             this.serviceProcessInstaller1.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceProcessInstaller1_AfterInstall);
             // 
-            // serviceInstaller1
+            // SyncDataService
             // 
-            this.serviceInstaller1.Description = "数据定时更新服务";
-            this.serviceInstaller1.DisplayName = "基于Quartz定时作业服务";
-            this.serviceInstaller1.ServiceName = "dataupdate";
-            this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
-            this.serviceInstaller1.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
-            this.serviceInstaller1.BeforeUninstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_BeforeUninstall);
+            this.SyncDataService.Description = "基于Quartz定时作业服务";
+            this.SyncDataService.DisplayName = "SyncDataService";
+            this.SyncDataService.ServiceName = "SyncDataService";
+            this.SyncDataService.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.SyncDataService.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
+            this.SyncDataService.BeforeUninstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_BeforeUninstall);
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             this.serviceProcessInstaller1,
-            this.serviceInstaller1});
+            this.SyncDataService});
 
         }
 
         #endregion
 
         private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
-        private System.ServiceProcess.ServiceInstaller serviceInstaller1;
+        private System.ServiceProcess.ServiceInstaller SyncDataService;
     }
 }
