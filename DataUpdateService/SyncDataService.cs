@@ -55,7 +55,7 @@ namespace DataUpdateService
                     .Build();
                 ITrigger shiptocom_trigger = TriggerBuilder.Create()
                     .StartNow()
-                    .WithCronSchedule("0/10 * * * * ?")
+                    .WithCronSchedule("* 0/30 * * * ?")
                     .Build();
                 scheduler.ScheduleJob(job, trigger);
                 scheduler.ScheduleJob(shiptocom_job, shiptocom_trigger);
