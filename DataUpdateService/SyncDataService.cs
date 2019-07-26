@@ -44,7 +44,7 @@ namespace DataUpdateService
                 //新建一个触发器
                 ITrigger trigger = TriggerBuilder.Create()
                     .StartNow()
-                    .WithCronSchedule("0/5 * * * * ?")
+                    .WithCronSchedule("* * 0/1 * * ?")
                     .Build();
                 //将任务与触发器关联起来放到调度器中
                 IJobDetail shiptocom_job = JobBuilder.Create<ShipToCompany>()
@@ -52,7 +52,7 @@ namespace DataUpdateService
                     .Build();
                 ITrigger shiptocom_trigger = TriggerBuilder.Create()
                     .StartNow()
-                    .WithCronSchedule("* 0/30 * * * ?")
+                    .WithCronSchedule("* * 0/5 * * ?")
                     .Build();
                 scheduler.ScheduleJob(job, trigger);
                 scheduler.ScheduleJob(shiptocom_job, shiptocom_trigger);
