@@ -21,16 +21,13 @@ namespace DataUpdateService
         public SyncDataService()
         {
             InitializeComponent();
+            logger = LogManager.GetLogger(this.GetType());
             Init().GetAwaiter().GetResult();
         }
 
         private async Task Init()
         {
-            //初始化
-            logger = LogManager.GetLogger(this.GetType());
-            //新建一个调度器工工厂
             ISchedulerFactory factory = new StdSchedulerFactory();
-            //使用工厂生成一个调度器
             scheduler = await factory.GetScheduler();
         }
 
