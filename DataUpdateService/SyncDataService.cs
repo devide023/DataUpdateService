@@ -33,30 +33,19 @@ namespace DataUpdateService
 
         protected override void OnStart(string[] args)
         {
-            if (!scheduler.IsStarted)
+            try
             {
-                //启动调度器
-                scheduler.Start();
-                //新建一个任务
-                IJobDetail job = JobBuilder.Create<GkDataSync>()
-                    .WithIdentity("GkDataSync", "GkDataSyncGroup")
-                    .Build();
-                //新建一个触发器
-                ITrigger trigger = TriggerBuilder.Create()
-                    .StartNow()
-                    .WithCronSchedule("* * 0/1 * * ?")
-                    .Build();
-                //将任务与触发器关联起来放到调度器中
-                IJobDetail shiptocom_job = JobBuilder.Create<ShipToCompany>()
-                    .WithIdentity("ShipToCompany", "GkDataSyncGroup")
-                    .Build();
-                ITrigger shiptocom_trigger = TriggerBuilder.Create()
-                    .StartNow()
-                    .WithCronSchedule("* * 0/5 * * ?")
-                    .Build();
-                scheduler.ScheduleJob(job, trigger);
-                scheduler.ScheduleJob(shiptocom_job, shiptocom_trigger);
-                logger.Info("Quarzt 数据同步服务开启");
+                if (!scheduler.IsStarted)
+                {
+                    //启动调度器
+                    scheduler.Start();
+                    logger.Info("Quarzt 数据同步服务开启");
+                }
+            }
+            catch (Exception e)
+            {
+                Tool.WriteLog(e.Message);
+                base.OnStop();
             }
         }
 

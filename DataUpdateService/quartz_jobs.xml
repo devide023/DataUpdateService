@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+<processing-directives>
+    <overwrite-existing-data>true</overwrite-existing-data>
+  </processing-directives>
+  <schedule>
+    <job>
+      <name>GkDataSync</name>
+      <group>GkDataSyncGroup</group>
+      <description>数据更新</description>
+      <job-type>DataUpdateService.Jobs.GkDataSync,DataUpdateService</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>GkDataSyncTrigger</name>
+        <group>Update</group>
+        <job-name>GkDataSync</job-name>
+        <job-group>GkDataSyncGroup</job-group>
+        <cron-expression>0/2 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>ShipToCompany</name>
+      <group>GkDataSyncGroup</group>
+      <description>数据同步</description>
+      <job-type>DataUpdateService.ShipToCompany,DataUpdateService</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>ShipToCompanyTrigger</name>
+        <group>Update</group>
+        <job-name>ShipToCompany</job-name>
+        <job-group>GkDataSyncGroup</job-group>
+        <cron-expression>0 0/5 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+</job-scheduling-data>

@@ -19,8 +19,7 @@ namespace DataUpdateService
         {
             return Task.Run(() =>
             {
-                Tool.WriteLog(DateTime.Now.ToString() + "->" + this.GetType().ToString());
-                log.Error(DateTime.Now.ToString());
+                log.Info(DateTime.Now.ToString());
             });
         }
     }
