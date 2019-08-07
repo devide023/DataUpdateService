@@ -39,13 +39,12 @@ namespace DataUpdateService
                 {
                     //启动调度器
                     scheduler.Start();
-                    logger.Info("Quarzt 数据同步服务开启");
+                    logger.Info("--------服务开启---------");
                 }
             }
             catch (Exception e)
             {
                 Tool.WriteLog(e.Message);
-                base.OnStop();
             }
         }
 
@@ -56,16 +55,19 @@ namespace DataUpdateService
                 scheduler.Shutdown();
             }
             base.OnStop();
+            logger.Info("--------服务停止---------");
         }
         protected override void OnPause()
         {
             scheduler.PauseAll();
             base.OnPause();
+            logger.Info("--------服务暂停---------");
         }
         protected override void OnContinue()
         {
             scheduler.ResumeAll();
             base.OnContinue();
+            logger.Info("--------服务继续---------");
         }
     }
 }
