@@ -27,6 +27,7 @@ namespace DataUpdateService.Jobs
         public GkDataSync()
         {
             log = LogManager.GetLogger(this.GetType());
+            ConfigurationManager.RefreshSection("appSettings");
             depth = ConfigurationManager.AppSettings["depth"] != null ? Convert.ToInt32(ConfigurationManager.AppSettings["depth"].ToString()) : 10;
             rooturl = ConfigurationManager.AppSettings["rooturl"];
             findexp = ConfigurationManager.AppSettings["findexp"];
