@@ -22,20 +22,37 @@
       </cron>
     </trigger>
     <job>
-      <name>ShipToCompany</name>
+      <name>SolrUpdate</name>
       <group>GkDataSyncGroup</group>
-      <description>数据同步</description>
-      <job-type>DataUpdateService.ShipToCompany,DataUpdateService</job-type>
+      <description>Solr增量数据同步</description>
+      <job-type>DataUpdateService.Jobs.SolrUpdate,DataUpdateService</job-type>
       <durable>true</durable>
       <recover>false</recover>
     </job>
     <trigger>
       <cron>
-        <name>ShipToCompanyTrigger</name>
+        <name>SolrUpdateTrigger</name>
         <group>Update</group>
-        <job-name>ShipToCompany</job-name>
+        <job-name>SolrUpdate</job-name>
         <job-group>GkDataSyncGroup</job-group>
-        <cron-expression>0 0/5 * * * ?</cron-expression>
+        <cron-expression>0 0/1 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>SolrFullUpdate</name>
+      <group>GkDataSyncGroup</group>
+      <description>Solr全量数据同步</description>
+      <job-type>DataUpdateService.Jobs.SolrFullUpdate,DataUpdateService</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>SolrFullUpdateTrigger</name>
+        <group>Update</group>
+        <job-name>SolrFullUpdate</job-name>
+        <job-group>GkDataSyncGroup</job-group>
+        <cron-expression>0 0 0/1 * * ?</cron-expression>
       </cron>
     </trigger>
   </schedule>
