@@ -18,7 +18,7 @@
         <group>Update</group>
         <job-name>GkDataSync</job-name>
         <job-group>GkDataSyncGroup</job-group>
-        <cron-expression>0 0 9,12,15 * * ?</cron-expression>
+        <cron-expression>0 0 9,12,15,16 * * ?</cron-expression>
       </cron>
     </trigger>
     <job>
@@ -35,7 +35,7 @@
         <group>Update</group>
         <job-name>SolrUpdate</job-name>
         <job-group>GkDataSyncGroup</job-group>
-        <cron-expression>0 0/1 * * * ?</cron-expression>
+        <cron-expression>0 30 9 * * ?</cron-expression>
       </cron>
     </trigger>
     <job>

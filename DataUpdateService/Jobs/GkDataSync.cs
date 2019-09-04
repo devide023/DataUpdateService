@@ -99,9 +99,16 @@ namespace DataUpdateService.Jobs
             var title = source.Find("title").FirstOrDefault();
             var title_all = source.Find(".title_all h1 font").FirstOrDefault().InnerText();
             var desc = source.Find("#Zoom span p:first-child").FirstOrDefault().InnerHtml();
+            //评分提取
+            Regex regpf = new Regex("(?<imdb>IMDb评分.*?<br />)");
+            Regex regdb = new Regex("(?<douban>豆瓣评分.*?<br />)");
+            var pfms = regpf.Match(desc);
+            var pfdb = regdb.Match(desc);
+            string imdb = pfms.Groups["imdb"].Value.Replace("IMDb评分", "").Replace("<br />", "").Trim();
+            string douban = pfdb.Groups["douban"].Value.Replace("豆瓣评分", "").Replace("<br />", "").Trim();
             foreach (var item in list)
             {
-                downloadlist.Add(new sys_film() { link = item.Attribute("href").Value(), title = title_all, txt = desc, fromurl = url,level=level });
+                downloadlist.Add(new sys_film() { link = item.Attribute("href").Value(), title = title_all, txt = desc, fromurl = url,level=level,imdb=imdb,douban=douban });
             }
         }
         private void SubSite(string url)

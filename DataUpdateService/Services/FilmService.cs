@@ -14,10 +14,10 @@ namespace DataUpdateService.Services
         {
             StringBuilder sql = new StringBuilder();
             sql.Append("INSERT INTO dbo.sys_film \n");
-            sql.Append("        ( link, title, txt,fromurl,[level] ) \n");
+            sql.Append("        ( link, title, txt,fromurl,[level],imdb,douban ) \n");
             sql.Append(" select @link,  \n");
             sql.Append("          @title,  \n");
-            sql.Append("          @txt,@fromurl,@level WHERE NOT EXISTS (SELECT * FROM sys_film WHERE link=@link) \n");
+            sql.Append("          @txt,@fromurl,@level,@imdb,@douban WHERE NOT EXISTS (SELECT * FROM sys_film WHERE link=@link) \n");
 
             using (FilmDB db = new FilmDB())
             {

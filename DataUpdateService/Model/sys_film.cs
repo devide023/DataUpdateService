@@ -15,5 +15,7 @@ namespace DataUpdateService.Model
         public string fromurl { get; set; }
         public int level { get; set; }
         public int pid { get; set; }
+        public string imdb { get; set; }
+        public string douban { get; set; }
     }
 }
