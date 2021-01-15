@@ -22,37 +22,20 @@
       </cron>
     </trigger>
     <job>
-      <name>SolrUpdate</name>
+      <name>WorkTask</name>
       <group>GkDataSyncGroup</group>
-      <description>Solr增量数据同步</description>
-      <job-type>DataUpdateService.Jobs.SolrUpdate,DataUpdateService</job-type>
+      <description>爬取任务数据</description>
+      <job-type>DataUpdateService.Jobs.WorkTask,DataUpdateService</job-type>
       <durable>true</durable>
       <recover>false</recover>
     </job>
     <trigger>
       <cron>
-        <name>SolrUpdateTrigger</name>
+        <name>WorkTaskTrigger</name>
         <group>Update</group>
-        <job-name>SolrUpdate</job-name>
+        <job-name>WorkTask</job-name>
         <job-group>GkDataSyncGroup</job-group>
-        <cron-expression>0 30 9 * * ?</cron-expression>
-      </cron>
-    </trigger>
-    <job>
-      <name>SolrFullUpdate</name>
-      <group>GkDataSyncGroup</group>
-      <description>Solr全量数据同步</description>
-      <job-type>DataUpdateService.Jobs.SolrFullUpdate,DataUpdateService</job-type>
-      <durable>true</durable>
-      <recover>false</recover>
-    </job>
-    <trigger>
-      <cron>
-        <name>SolrFullUpdateTrigger</name>
-        <group>Update</group>
-        <job-name>SolrFullUpdate</job-name>
-        <job-group>GkDataSyncGroup</job-group>
-        <cron-expression>0 0/5 * * * ?</cron-expression>
+        <cron-expression>* */5 * * * ?</cron-expression>
       </cron>
     </trigger>
   </schedule>
