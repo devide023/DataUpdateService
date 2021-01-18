@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using DataUpdateService.Model;
+using StackExchange.Redis;
+using System.Configuration;
+using DataUpdateService.DB;
 namespace UnitTestProject1
 {
     [TestClass]
@@ -20,25 +23,52 @@ namespace UnitTestProject1
         string end_page_url = "";
         int level = 0;
         [TestMethod]
+        public void TestRedis()
+        {
+            DataUpdateService.Services.JobService jobs = new DataUpdateService.Services.JobService();
+            jobs.SaveJobs();
+        }
+        [TestMethod]
         public void TestMethod1()
         {
 
             string url = "https://www.clouderwork.com/jobs/project.html";
-            PageUrlList(url);
-            Console.WriteLine(pageurl_hs.Count);
-            //List<sys_job> list = new List<sys_job>();
+            DataUpdateService.Services.JobService jobs = new DataUpdateService.Services.JobService();
+            jobs.PageUrlList(url);
+            //PageUrlList(url);
             //foreach (var item in pageurl_hs)
             //{
-            //    list.AddRange(Get_Jobs(item));
+            //    this.joblist.AddRange(Get_Jobs(item));
             //}
-            //Console.WriteLine(list.Count);
+            //DataUpdateService.Services.JobService jobs = new DataUpdateService.Services.JobService();
+            //jobs.SaveJobs(joblist);
 
         }
         [TestMethod]
         public void TestJobs()
         {
-            
-            
+            List<sys_job> list = new List<sys_job>();
+            list.Add(new sys_job
+            {
+                jobid="234",
+                author="devide",
+                joburl="tets.com",
+                addtime=DateTime.Now,
+                amount="1000",
+                desc="asdasdf",
+                gq="10天",
+                number="3人投标",
+                status="招募",
+                tag="项目制",
+                rq="2020-12-31",
+                title="微信开发",
+                price_max="3000",
+                price_min="2000"
+
+            });
+            DataUpdateService.Services.JobService jobs = new DataUpdateService.Services.JobService();
+            jobs.SaveJobs(list);
+
         }
         private void PageUrlList(string url)
         {

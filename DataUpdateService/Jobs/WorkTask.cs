@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Quartz;
 using log4net;
-using System.Text.RegularExpressions;
-using Ivony.Html.Parser;
-using Ivony.Html;
+using System.Configuration;
+using DataUpdateService.Services;
 
 namespace DataUpdateService.Jobs
 {
@@ -22,11 +21,12 @@ namespace DataUpdateService.Jobs
         {
             var task = Task.Run(() =>
             {
-                log.Info("---------抓取任务数据-------------");
-                string url = "https://www.clouderwork.com/jobs/project.html";
-                Regex reg = new Regex(@".*/\d+.html");
-                IHtmlDocument html = new JumonyParser().LoadDocument(url);
-                html.Find(".page-div ul li a");
+                JobService jobservice = new JobService();
+                string url = ConfigurationManager.AppSettings["joburl"];
+                log.Info("--工作任务采集开始--");
+                jobservice.PageUrlList(url);
+                int ret = jobservice.SaveJobs();
+                log.Info("--工作任务采集完成--");
             });
             return task;
         }
