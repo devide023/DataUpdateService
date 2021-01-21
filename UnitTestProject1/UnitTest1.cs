@@ -15,7 +15,7 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTest1
     {
-        string domain = "https://www.clouderwork.com";
+        string domain = "https://www.yuanjisong.com";
         HashSet<string> pageurl_hs = new HashSet<string>();
         HashSet<string> joburl_hs = new HashSet<string>();
         List<sys_job> joblist = new List<sys_job>();
@@ -31,17 +31,23 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestMethod1()
         {
-
-            string url = "https://www.clouderwork.com/jobs/project.html";
-            DataUpdateService.Services.JobService jobs = new DataUpdateService.Services.JobService();
-            jobs.PageUrlList(url);
-            //PageUrlList(url);
-            //foreach (var item in pageurl_hs)
-            //{
-            //    this.joblist.AddRange(Get_Jobs(item));
-            //}
-            //DataUpdateService.Services.JobService jobs = new DataUpdateService.Services.JobService();
-            //jobs.SaveJobs(joblist);
+            try
+            {
+                string url = "https://www.ygdy8.net/html/gndy/dyzz/list_23_9.html";
+                string infourl = "https://www.ygdy8.net/html/gndy/dyzz/20200731/60279.html";
+                DataUpdateService.Services.FilmService service = new DataUpdateService.Services.FilmService();
+                //service.Get_FilmInfo(infourl);
+                //string rooturl = ConfigurationManager.AppSettings["rooturl"];
+                service.Save();
+                //var films = service.GetItemList(url);
+                //service.SaveData(films);
+                //service.Save();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
 
         }
         [TestMethod]

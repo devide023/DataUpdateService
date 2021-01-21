@@ -23,9 +23,15 @@ namespace DataUpdateService.Jobs
             {
                 JobService jobservice = new JobService();
                 string url = ConfigurationManager.AppSettings["joburl"];
+                string yjsurl = ConfigurationManager.AppSettings["yjsjoburl"];
                 log.Info("--工作任务采集开始--");
                 jobservice.PageUrlList(url);
-                int ret = jobservice.SaveJobs();
+                jobservice.SaveJobs();
+                var list = jobservice.YjsJobs(yjsurl);
+                log.Info("--猿急送任务首页数据条数---" + list.Count);
+                jobservice.SaveJobs(list);
+                jobservice.YjsPageUrlList(yjsurl);
+                jobservice.SaveYjsJobs();
                 log.Info("--工作任务采集完成--");
             });
             return task;

@@ -22,11 +22,120 @@ namespace DataUpdateService.Services
         string lasturl = "";
         int index = 1;
         int firstpage = 0;
+        bool yjsfirstpage = true;
+        bool yjs_endflag = false;
         public JobService()
         {
             log = LogManager.GetLogger(this.GetType());
             RedisDb.InitDb();
             this.db = RedisDb.GetRedisDb;
+        }
+        public void YjsPageUrlList(string url)
+        {
+            try
+            {
+                IHtmlDocument html = new JumonyParser().LoadDocument(url);
+                var pagelist = html.Find("nav.page_nav_div ul.pagination_webpage li a");
+                var pagenext = html.Find("nav.page_nav_div ul.pagination_webpage li.disabled");
+                foreach (var item in pagenext)
+                {
+                    string pagetxt = Regex.Replace(item.InnerHtml(), "<.*?>", "");
+                    if (pagetxt.IndexOf("下一页") >= 0)
+                    {
+                        yjs_endflag = true;
+                    }
+                }
+                var size = pagelist.Count();
+                int i = 0;
+                i = yjsfirstpage ? 0 : 2;
+                for (; i < size - 1; i++)
+                {
+                    var item = pagelist.ToList()[i];
+                    string pageurl = item.Attribute("href").Value();
+                    this.db.SortedSetAdd("yjspageurl", pageurl, (double)index++);
+                    if (i == size - 2 && !yjs_endflag)
+                    {
+                        yjsfirstpage = false;
+                        YjsPageUrlList(pageurl);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                throw;
+            }
+        }
+
+        public List<sys_job> YjsJobs(string url)
+        {
+            try
+            {
+                string regtxt = "<.*?>";
+                IHtmlDocument html = new JumonyParser().LoadDocument(url);
+                var jobs = html.Find("#db_adapt_id .weui_panel");
+                List<sys_job> listjob = new List<sys_job>();
+                foreach (var item in jobs)
+                {
+                    string joburl = item.Find("a").FirstOrDefault().Attribute("href").Value();
+                    int pos1 = joburl.LastIndexOf("/");
+                    string jobid = joburl.Substring(pos1 + 1, joburl.Length - (pos1 + 1));
+                    bool isok = this.db.SetAdd("yjsjobid", jobid);
+                    if (!isok)
+                    {
+                        continue;
+                    }
+                    string jobtitle = item.Find("a .topic_title")!=null? item.Find("a .topic_title").FirstOrDefault().InnerText():"";
+                    string jobdesc = string.Empty;
+                    string jobgs = string.Empty;
+                    string jobprice = string.Empty;
+                    var subitems = item.Find(".job_list_item_div .media_desc_adapt");
+                    string author = item.Find("h4.weui_media_title ")!=null? item.Find("h4.weui_media_title ").FirstOrDefault().InnerText():"";
+                    bool isover = item.ToString().IndexOf("zhushi_span") > 0 ? false : true;
+                    if (isover)
+                    {
+                        continue;
+                    }
+                    string numberhtml = item.Find("span.zhushi_span") != null ? item.Find("span.zhushi_span").FirstOrDefault().InnerHtml() : "";
+                    string number = Regex.Replace(numberhtml, regtxt, "");
+                    foreach (var subitem in subitems)
+                    {
+                        string subitemhtml = subitem.InnerHtml();
+                        if (subitemhtml.IndexOf("glyphicon-th-large") >= 0)
+                        {
+                            jobdesc = Regex.Replace(subitemhtml, regtxt, "").Replace("描述：", "");
+                        }
+                        if (subitemhtml.IndexOf("glyphicon-hourglass") >= 0)
+                        {
+                            jobgs = Regex.Replace(subitemhtml, regtxt, "").Replace("工时：", "");
+                        }
+                        if (subitemhtml.IndexOf("glyphicon-yen") >= 0)
+                        {
+                            jobprice = Regex.Replace(subitemhtml, regtxt, "").Replace("总价：", "").Replace("元", "");
+                        }
+                    }
+                    sys_job jobentry = new sys_job
+                    {
+                        jobid = jobid,
+                        title = jobtitle,
+                        desc = jobdesc,
+                        number = number,
+                        joburl = joburl,
+                        addtime = DateTime.Now,
+                        amount = jobprice,
+                        author = author,
+                        gq = jobgs
+                    };
+                    listjob.Add(jobentry);
+                }
+                return listjob;
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                throw;
+            }
+
         }
         /// <summary>
         /// 获取页码连接保存到redis
@@ -151,8 +260,9 @@ namespace DataUpdateService.Services
         /// 从redis数据库获取每页任务保存到mysql数据库
         /// </summary>
         /// <returns></returns>
-        public int SaveJobs() {
-           RedisValue[] list = db.SortedSetRangeByRank("pageurl");
+        public int SaveJobs()
+        {
+            RedisValue[] list = db.SortedSetRangeByRank("pageurl");
             List<int> errors = new List<int>();
             foreach (var item in list)
             {
@@ -161,6 +271,24 @@ namespace DataUpdateService.Services
                 errors.Add(ret);
             }
             return errors.Where(t => t == 0).Count();
+        }
+
+        public void SaveYjsJobs()
+        {
+            try
+            {
+                RedisValue[] list = db.SortedSetRangeByRank("yjspageurl");
+                foreach (var item in list)
+                {
+                    List<sys_job> joblist = YjsJobs(item);
+                    SaveJobs(joblist);
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                throw;
+            }
         }
 
         public int SaveJobs(List<sys_job> jobs)
