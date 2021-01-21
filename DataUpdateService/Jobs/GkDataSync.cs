@@ -41,6 +41,7 @@ namespace DataUpdateService.Jobs
                 service.SaveData(films);
                 service.GetPageUrlToRedis(rooturl);
                 service.Save();
+                service.SaveErrorData();
                 log.Info("------数据抓取完毕---------");
             });
             return task;

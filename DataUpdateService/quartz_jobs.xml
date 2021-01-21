@@ -18,7 +18,7 @@
         <group>Update</group>
         <job-name>GkDataSync</job-name>
         <job-group>GkDataSyncGroup</job-group>
-        <cron-expression>0 0 9,10,12,15,16 * * ?</cron-expression>
+        <cron-expression>0 0 0,4,9,10,12,15,17,19,22 * * ?</cron-expression>
       </cron>
     </trigger>
     <job>

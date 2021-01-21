@@ -73,9 +73,7 @@ namespace DataUpdateService.Services
             catch (Exception e)
             {
                 log.Error(url+"-----" + e.Message);
-                Console.WriteLine(url + "-----" + e.Message);
-                //System.Threading.Thread.Sleep(5000);
-                //GetItemList(url);
+                this.db.ListLeftPush("error_pageurl", url);
                 return new List<sys_film>();
             }
         }
@@ -115,9 +113,7 @@ namespace DataUpdateService.Services
             catch (Exception e)
             {
                 log.Error(url+"----"+e.Message);
-                Console.WriteLine(url + "-----" + e.Message);
-                //System.Threading.Thread.Sleep(5000);
-                //Get_FilmInfo(url);
+                this.db.ListLeftPush("error_infourl", url);
                 return new List<sys_film>();
             }
         }
@@ -180,6 +176,27 @@ namespace DataUpdateService.Services
             {
                var films = GetItemList(item);
                 AddFilm(films);
+            }
+        }
+
+        public void SaveErrorData()
+        {
+            string url = string.Empty;
+            try
+            {
+                List<sys_film> fs = new List<sys_film>();
+                long errors = db.ListLength("error_infourl");
+                for (int i = 0; i < errors; i++)
+                {
+                    url = db.ListLeftPop("error_infourl");
+                    fs.AddRange(Get_FilmInfo(url));
+                }
+                AddFilm(fs);
+            }
+            catch (Exception e)
+            {
+                log.Error(url + "----" + e.Message);
+                this.db.ListRightPush("error_infourl", url);
             }
         }
     }
