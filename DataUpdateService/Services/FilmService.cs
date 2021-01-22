@@ -88,7 +88,8 @@ namespace DataUpdateService.Services
                 if (pos < 0) {
                     return filmlist;
                 }
-                var list = source.Find("#Zoom a").Where(t => t.Attribute("href").Value().Contains("magnet:") || t.Attribute("href").Value().Contains("ftp:"));
+                //var list = source.Find("#Zoom a").Where(t => t.Attribute("href").Value().Contains("magnet:") || t.Attribute("href").Value().Contains("ftp:"));
+                var list = source.Find("#Zoom a");
                 var title_all = source.Find(".title_all h1 font").FirstOrDefault().InnerText();
                 var desc = source.Find("#Zoom span").FirstOrDefault().InnerHtml();
                 //评分提取
@@ -101,10 +102,17 @@ namespace DataUpdateService.Services
                 foreach (var item in list)
                 {
                     string filmlink = item.Attribute("href").Value();
-                    bool isok = db.SetAdd("filmlink", filmlink);
-                    if (isok)
+                    if (filmlink == null)
                     {
-                        filmlist.Add(new sys_film() { link = filmlink, title = title_all, txt = desc, fromurl = url, imdb = imdb, douban = douban });
+                        continue;
+                    }
+                    if (filmlink.Contains("magnet:") || filmlink.Contains("ftp:"))
+                    {
+                        bool isok = db.SetAdd("filmlink", filmlink);
+                        if (isok)
+                        {
+                            filmlist.Add(new sys_film() { link = filmlink, title = title_all, txt = desc, fromurl = url, imdb = imdb, douban = douban });
+                        }
                     }
                 }
 

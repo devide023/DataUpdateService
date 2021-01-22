@@ -168,6 +168,7 @@
     <Compile Include="DB\RedisDb.cs" />
     <Compile Include="DB\WorkDB.cs" />
     <Compile Include="Jobs\GkDataSync.cs" />
+    <Compile Include="Jobs\RRKFJob.cs" />
     <Compile Include="Jobs\ShipToCompany.cs" />
     <Compile Include="Jobs\SolrFullUpdate.cs" />
     <Compile Include="Jobs\SolrUpdate.cs" />
@@ -182,7 +183,9 @@
     </Compile>
     <Compile Include="Services\FilmService.cs" />
     <Compile Include="Services\IWebData.cs" />
+    <Compile Include="Services\Job.cs" />
     <Compile Include="Services\JobService.cs" />
+    <Compile Include="Services\RRKFService.cs" />
     <Compile Include="SyncDataService.cs">
       <SubType>Component</SubType>
     </Compile>

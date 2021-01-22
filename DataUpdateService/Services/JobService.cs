@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace DataUpdateService.Services
 {
-    public class JobService
+    public class JobService:Job
     {
         private ILog log;
         private IDatabase db;
@@ -291,56 +291,6 @@ namespace DataUpdateService.Services
             }
         }
 
-        public int SaveJobs(List<sys_job> jobs)
-        {
-            try
-            {
-                using (WorkDB db = new WorkDB())
-                {
-                    StringBuilder sql = new StringBuilder();
-                    sql.Append("INSERT INTO sys_jobs \n");
-                    sql.Append("( \n");
-                    sql.Append("  jobid, \n");
-                    sql.Append("  title, \n");
-                    sql.Append("  `status` , \n");
-                    sql.Append("  tag, \n");
-                    sql.Append("  amount, \n");
-                    sql.Append("  rq, \n");
-                    sql.Append("  gq, \n");
-                    sql.Append("  `desc` , \n");
-                    sql.Append("  author, \n");
-                    sql.Append("  `addtime` , \n");
-                    sql.Append("  joburl, \n");
-                    sql.Append("  number, \n");
-                    sql.Append("  price_max, \n");
-                    sql.Append("  price_min \n");
-                    sql.Append(") \n");
-                    sql.Append("select \n");
-                    sql.Append("  @jobid, \n");
-                    sql.Append("  @title, \n");
-                    sql.Append("  @status, \n");
-                    sql.Append("  @tag, \n");
-                    sql.Append("  @amount, \n");
-                    sql.Append("  @rq, \n");
-                    sql.Append("  @gq, \n");
-                    sql.Append("  @desc, \n");
-                    sql.Append("  @author, \n");
-                    sql.Append("  @addtime, \n");
-                    sql.Append("  @joburl, \n");
-                    sql.Append("  @number, \n");
-                    sql.Append("  @price_max, \n");
-                    sql.Append("  @price_min \n");
-                    sql.Append(" where not exists (select * from sys_jobs where jobid = @jobid) \n");
-
-                    return db.GetConn.Execute(sql.ToString(), jobs);
-                }
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-
-                throw;
-            }
-        }
+        
     }
 }
